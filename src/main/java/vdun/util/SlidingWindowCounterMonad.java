@@ -21,7 +21,7 @@ public class SlidingWindowCounterMonad {
 
     public long getCountThenAdvance() {
         slot[windowLength] += slot[headSlot];
-        long result = slot[windowLength];
+        int result = slot[windowLength];
         headSlot = (headSlot + 1) % windowLength;
         slot[windowLength] -= slot[headSlot];
         slot[headSlot] = 0;

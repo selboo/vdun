@@ -24,7 +24,7 @@ public class SlidingWindowCounter<T> implements Serializable {
         this.windowLength = windowLength;
     }
 
-    public void increase(T obj, long n) {
+    public void increase(T obj, int n) {
         int[] counts = objToCounts.get(obj);
         if (counts == null) {
             counts = new int[windowLength + 1];
