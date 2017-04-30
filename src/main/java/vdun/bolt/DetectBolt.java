@@ -50,7 +50,7 @@ public class DetectBolt extends BaseRichBolt {
                     String[] attrs = e.getKey().split("/");
                     summary.put("domain", attrs[0]);
                     summary.put("ip", attrs[1]);
-                    outputCollector.emit(new Values(f.getSummaryThenAdvance()));
+                    outputCollector.emit(new Values(summary));
                 }
             }
             for (String key : ipToRemove) {
