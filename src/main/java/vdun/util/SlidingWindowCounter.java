@@ -33,6 +33,10 @@ public class SlidingWindowCounter<T> implements Serializable {
         counts[headSlot] += n;
     }
 
+    public int size() {
+        return objToCounts.size();
+    }
+
     public Map<T, Integer> getCounts() {
         Map<T, Integer> result = new HashMap<T, Integer>();
         for (Map.Entry<T, int[]> e : objToCounts.entrySet()) {
@@ -67,6 +71,10 @@ public class SlidingWindowCounter<T> implements Serializable {
         return counts;
     }
 
+    public List<Entry<T, Integer>> getMostCommon() {
+        return getMostCommon(objToCounts.size());
+    }
+
     public List<Entry<T, Integer>> getMostCommon(int n) {
         List<Entry<T, Integer>> c = new ArrayList<Entry<T, Integer>>(getCounts().entrySet());
         c.sort(new Comparator<Entry<T, Integer>>() {
@@ -74,6 +82,6 @@ public class SlidingWindowCounter<T> implements Serializable {
                 return (r.getValue()).compareTo(l.getValue());
             }
         });
-        return c.subList(0, Math.min(c.size(), n));
+        return objToCounts.size() > n ? c.subList(0, Math.min(c.size(), n)) : c;
     }
 }

@@ -15,11 +15,11 @@ public class SlidingWindowCounterMonad {
         slot[headSlot] += n;
     }
 
-    public long getCount() {
+    public int getCount() {
         return slot[windowLength] + slot[headSlot];
     }
 
-    public long getCountThenAdvance() {
+    public int getCountThenAdvance() {
         slot[windowLength] += slot[headSlot];
         int result = slot[windowLength];
         headSlot = (headSlot + 1) % windowLength;

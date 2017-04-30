@@ -62,5 +62,17 @@ public class SlidingWindowCounterTest {
         counter.increase("#2", 1);
         counter.increase("#3", 1);
         assertEquals(counter.getMostCommon(2).size(), 2);
+        assertEquals(counter.getMostCommon().size(), 3);
+    }
+
+    @Test
+    public void testAutoRemoveZeroCounter() {
+        SlidingWindowCounter<String> counter = new SlidingWindowCounter<String>(2);
+        counter.increase("#1", 1);
+        assertEquals(counter.size(), 1);
+        counter.advanceWindow();
+        assertEquals(counter.size(), 1);
+        counter.advanceWindow();
+        assertEquals(counter.size(), 0);
     }
 }
