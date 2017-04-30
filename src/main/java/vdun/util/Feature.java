@@ -62,7 +62,7 @@ public class Feature {
                 mostCommon[j] = new MostCommon();
                 mostCommon[j].name = e.getKey();
                 mostCommon[j].pv = e.getValue();
-                mostCommon[j].ratio = e.getValue() / pv;
+                mostCommon[j].ratio = (float)e.getValue() / pv;
             }
             summary.put("most_" + feature, mostCommon);
             summary.put("pv_most_" + feature, mostCommon[0].pv);
