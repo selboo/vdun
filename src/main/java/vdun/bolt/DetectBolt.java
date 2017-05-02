@@ -61,7 +61,7 @@ public class DetectBolt extends BaseRichBolt {
             String key = (String)request.get("domain") + "/" + (String)request.get("ip");
             Feature feature = ipToFeature.get(key);
             if (feature == null) {
-                feature = new Feature(60, new String[]{"path", "user_agent", "referer"});
+                feature = new Feature(60);
                 ipToFeature.put(key, feature);
             }
             feature.update(request);
