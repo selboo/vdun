@@ -39,3 +39,7 @@ input（输入）-> enrich（提取有效日志特征）-> risk（计算域名�
    "upstream_status" : "$upstream_status"
 }
 ```
+
+## 规则语法
+
+https://commons.apache.org/proper/commons-jexl/reference/syntax.html
