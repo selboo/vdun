@@ -1,5 +1,79 @@
+# 特征检测的间隔和窗口大小，单位都是秒。
+# interval 应该是 window_length 的约数，如果不是，系统会取小于其的最大约数。
+detect:
+  - interval: 3
+  - window_length: 60
+
+# 特征检测计算出来的特征如下，特征检测的规则表达式可以引用这些变量。
+#
+# {
+#     "domain": "newahtv.bj116.com",
+#     "ip": "221.204.169.151",
+#      // 该 ip 的 总pv
+#     "pv": 11,
+#
+#      // 排名第一的 path/referer/user_agent 的 pv
+#     "pv_most_path": 5,
+#     "pv_most_refer": 11,
+#     "pv_most_ua": 11,
+#
+#      // 排名第一的 path/referer/user_agent 的 pv 占总 pv 的比例。
+#     "ratio_most_path": 0.454,
+#     "ratio_most_refer": 1,
+#     "ratio_most_ua": 1,
+#
+#      // uniq_xxx, 出现的不同 path/referer/user_agent 的个数。
+#     "uniq_path": 3,
+#     "uniq_refer": 1,
+#     "uniq_ua": 1
+#
+#      // 该计算周期的结束时间
+#     "@timestamp": "2015-12-15T10:34:08+0800",
+#
+#      // most_xxx 描述了该周期内主要的访问行为, 计算方法都一样, 以 path 为例说明:
+#      // 1. 计算每个 path 的pv。
+#      // 2. 按 pv 倒序排列。
+#      // 4. 计算每个 path 的 pv 占总 pv 的百分比 ratio 。
+#      // 5. 保留最多的 5 个。
+#     "most_path": [
+#         {
+#             "name": "/capi3/activity/checkaward200.php",
+#             "pv": 5,
+#             "ratio": 0.454
+#         },
+#         {
+#             "name": "/capi3/activity/gualist200.php",
+#             "pv": 4,
+#             "ratio": 0.363
+#         },
+#         {
+#             "name": "/capi3/activity/guaclick200.php",
+#             "pv": 2,
+#             "ratio": 0.181
+#         }
+#     ],
+#
+#      // 主要的referer
+#     "most_user_refer": [
+#         {
+#             "name": "-",
+#             "pv": 11,
+#             "ratio": 1
+#         }
+#     ],
+#
+#      // 主要的user-agent
+#     "main_user_agent": [
+#         {
+#             "name": "-",
+#             "pv": 11,
+#             "ratio": 1
+#         }
+#     ],
+# }
+
 policy:
   - id: "1"
     name: 流量攻击
     risk: high
-    when: ratio_most_path > 0.9 and pv > 120 
+    if: ratio_most_path > 0.9 and pv > 120

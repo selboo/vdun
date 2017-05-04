@@ -30,7 +30,7 @@ public class BrainBolt extends BaseRichBolt {
         jexl = new JexlBuilder().create();
         exprs = new ArrayList<JexlExpression>();
         for (Map<String, String> policy : policyList) {
-            exprs.add(jexl.createExpression(policy.get("when")));
+            exprs.add(jexl.createExpression(policy.get("if")));
         }
     }
 
