@@ -64,7 +64,7 @@ detect:
 #     ],
 #
 #      // 主要的user-agent
-#     "main_user_agent": [
+#     "most_user_agent": [
 #         {
 #             "name": "-",
 #             "pv": 11,
