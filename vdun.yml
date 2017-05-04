@@ -1,4 +1,5 @@
 # 特征检测的间隔和窗口大小，单位都是秒。
+# 每 *interval* 检测一次 *window_length* 窗口内的请求特征。
 # interval 应该是 window_length 的约数，如果不是，系统会取小于其的最大约数。
 detect:
   - interval: 3
@@ -73,7 +74,6 @@ detect:
 # }
 #
 #  风险规则判定表达式的写法可以参考以下示例，详细语法参见：https://commons.apache.org/proper/commons-jexl/reference/syntax.html
-
 policy:
   - id: "1"
     name: 流量攻击
