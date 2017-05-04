@@ -16,15 +16,21 @@ import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseRichBolt;
+import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
+import backtype.storm.tuple.Values;
 
 public class BrainBolt extends BaseRichBolt {
     private static final Logger LOG = LoggerFactory.getLogger(BrainBolt.class);
     private JexlEngine jexl;
     private List<JexlExpression> exprs;
+    private List<Map<String, String>> policyList;
+    private OutputCollector outputCollector;
 
     public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
-        List<Map<String, String>> policyList = (List<Map<String, String>>)stormConf.get("policy");
+        outputCollector = collector;
+
+        policyList = (List<Map<String, String>>)stormConf.get("policy");
         LOG.info("vdun.policy: {}", policyList);
 
         jexl = new JexlBuilder().create();
@@ -35,14 +41,22 @@ public class BrainBolt extends BaseRichBolt {
     }
 
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
+        declarer.declare(new Fields("feature"));
     }
 
     public void execute(Tuple tuple) {
         Map<String, Object> feature = (Map<String, Object>)tuple.getValue(0);
         JexlContext jc = new MapContext(feature);
-        for (JexlExpression e : exprs) {
+        for (int i = 0; i < policyList.size(); i++) {
+            Map<String, String> p = policyList.get(i);
+            JexlExpression e = exprs.get(i);
             Object result = e.evaluate(jc);
-            LOG.info("result: {}", result);
+            LOG.info("policy: {}, result: {}", p, result);
+            if (result instanceof Boolean && (Boolean)result == true) {
+                feature.put("risk", p.get("risk"));
+                outputCollector.emit(new Values(feature));
+                return;
+            }
         }
     }
 }

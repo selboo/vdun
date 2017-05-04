@@ -33,7 +33,7 @@ public class VDunTopology {
 		builder.setBolt("filter", new FilterBolt()).shuffleGrouping("input");
 		builder.setBolt("detect", new DetectBolt()).fieldsGrouping("filter", new Fields("domain", "ip"));
 		builder.setBolt("brain", new BrainBolt()).shuffleGrouping("detect");
-		builder.setBolt("output", new OutputBolt()).shuffleGrouping("detect");
+		builder.setBolt("output", new OutputBolt()).shuffleGrouping("brain");
 
 		Config config = new Config();
 		config.setDebug(true);
