@@ -17,7 +17,6 @@ import backtype.storm.tuple.Values;
 import backtype.storm.utils.TupleUtils;
 import vdun.util.Feature;
 import vdun.util.Request;
-import vdun.util.SlidingWindowCounter;
 
 public class DetectBolt extends BaseRichBolt {
     private OutputCollector outputCollector;
