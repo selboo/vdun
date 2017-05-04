@@ -1,9 +1,8 @@
 # 特征检测的间隔和窗口大小，单位都是秒。
-# 每 *interval* 检测一次 *window_length* 窗口内的请求特征。
-# interval 应该是 window_length 的约数，如果不是，系统会取小于其的最大约数。
+# 比如下面的配置会让 vdun 每 3 秒 计算一次 3 * 20 秒内所有请求的特征。
 detect:
-  - interval: 3
-  - window_length: 60
+  interval: 5
+  window_length: 12
 
 # 特征检测计算出来的特征如下，特征检测的规则表达式可以引用这些变量。
 #

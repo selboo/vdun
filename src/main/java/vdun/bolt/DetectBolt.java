@@ -21,10 +21,20 @@ import vdun.util.Request;
 public class DetectBolt extends BaseRichBolt {
     private OutputCollector outputCollector;
     private Map<String, Feature> ipToFeature;
+    private int interval;
+    private int windowLength;
+    private int elapsed;
 
     public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
         this.outputCollector = collector;
         this.ipToFeature = new HashMap<String,Feature>();
+
+        this.elapsed = 0;
+        Map<String, Long> conf = (Map<String, Long>)stormConf.get("detect");
+        if (conf != null) {
+            this.interval = conf.getOrDefault("interval", 3L).intValue();
+            this.windowLength = conf.getOrDefault("window_length", 20L).intValue();
+        }
     }
 
     public Map<String, Object> getComponentConfiguration() {
@@ -39,6 +49,12 @@ public class DetectBolt extends BaseRichBolt {
 
     public void execute(Tuple tuple) {
         if (TupleUtils.isTick(tuple)) {
+            if (++elapsed < interval) {
+                return;
+            } else {
+                elapsed = 0;
+            }
+
             Set<String> ipToRemove = new HashSet<String>();
             for (Entry<String, Feature> e: ipToFeature.entrySet()) {
                 Feature f = e.getValue();
@@ -60,7 +76,7 @@ public class DetectBolt extends BaseRichBolt {
             String key = (String)request.get("domain") + "/" + (String)request.get("ip");
             Feature feature = ipToFeature.get(key);
             if (feature == null) {
-                feature = new Feature(60);
+                feature = new Feature(windowLength);
                 ipToFeature.put(key, feature);
             }
             feature.update(request);
