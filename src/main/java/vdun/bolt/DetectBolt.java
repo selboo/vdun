@@ -23,13 +23,13 @@ public class DetectBolt extends BaseRichBolt {
     private Map<String, Feature> ipToFeature;
     private int interval;
     private int windowLength;
-    private int elapsed;
+    private int elapsedSecs;
 
     public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
         this.outputCollector = collector;
         this.ipToFeature = new HashMap<String,Feature>();
 
-        this.elapsed = 0;
+        this.elapsedSecs = 0;
         Map<String, Long> conf = (Map<String, Long>)stormConf.get("detect");
         if (conf != null) {
             this.interval = conf.getOrDefault("interval", 3L).intValue();
@@ -49,10 +49,10 @@ public class DetectBolt extends BaseRichBolt {
 
     public void execute(Tuple tuple) {
         if (TupleUtils.isTick(tuple)) {
-            if (++elapsed < interval) {
+            if (++elapsedSecs < interval) {
                 return;
             } else {
-                elapsed = 0;
+                elapsedSecs = 0;
             }
 
             Set<String> ipToRemove = new HashSet<String>();
