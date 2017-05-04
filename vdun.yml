@@ -1,5 +1,5 @@
 policy:
   - id: "1"
     name: 流量攻击
-    level: block
+    risk: high
     when: ratio_most_path > 0.9 and pv > 120 
