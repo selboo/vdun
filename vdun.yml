@@ -71,6 +71,8 @@ detect:
 #         }
 #     ],
 # }
+#
+#  风险规则判定表达式的写法可以参考以下示例，详细语法参见：https://commons.apache.org/proper/commons-jexl/reference/syntax.html
 
 policy:
   - id: "1"
