@@ -1,10 +1,10 @@
-# 特征检测的间隔和窗口大小，单位都是秒。
-# 比如下面的配置会让 vdun 每 3 秒 计算一次 3 * 20 秒内所有请求的特征。
+# 特征计算的间隔和窗口大小，单位都是秒。
+# 比如下面的配置会让 vdun 每 3 秒计算一次每个 ip 3*20 秒内所有请求的特征。
 detect:
   interval: 5
   window_length: 12
 
-# 特征检测计算出来的特征如下，特征检测的规则表达式可以引用这些变量。
+# 计算出来的特征如下，风险检测的规则表达式可以引用这些变量。
 #
 # {
 #     "domain": "newahtv.bj116.com",
@@ -77,4 +77,4 @@ policy:
   - id: "1"
     name: 流量攻击
     risk: high
-    if: ratio_most_path > 0.9 and pv > 120
+    if: (pv > 120 and ratio_most_path > 0.9) or (pv > 30 and ratio_most_path > 0.99)
