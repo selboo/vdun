@@ -5,8 +5,11 @@
 使用前需要先在 iptables 规则中添加规则，例如：
 
 ```
+# ipset create $DOMAIN hash:ip hashsize 819200 maxelem 100000 timeout 300 -exist
+# ipset add $DOMAIN $IP timeout 300 -exist;done
+# iptables -A INPUT -p tcp -m tcp --dport 80 -m set --match-set $DOMAIN src -m string --string "$DOMAIN" --algo kmp --to 1480 -j NFQUEUE --queue-num 1
 # iptables -I INPUT 1 -p tcp --dport 1234 -j NFQUEUE --queue-num 1
-# tcp_force_reset 1
+# ./tcp_force_reset 1
 ```
 
 没有程序监听队列时，默认规则是丢弃所有包，当有程序监听时，就可以看到程序的工作信息：
