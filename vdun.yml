@@ -75,3 +75,24 @@ detect:
 #  风险规则判定表达式的写法可以参考以下示例，详细语法参见：https://commons.apache.org/proper/commons-jexl/reference/syntax.html
 policy:
   - {id: "1", risk: high, if: (pv > 120 and ratio_most_path > 0.9) or (pv > 30 and ratio_most_path > 0.99)}
+
+# 对于风险为 high 的 ip，拦截模块会依次调用以下 action，目前支持 http 回调。
+# http 回调的参数可以通过模版自定义，模版中可以引用以下变量：
+#
+#  - domain: 要拦截的域名。
+#  - ips: 要拦截的 ip 列表，类型为 list。
+#
+# 模版语法见：http://jinja.pocoo.org/docs/2.9/templates/
+action:
+  - type: http
+    url: http://b10ck.vdun.com/block/these/ips?domain={{ domain }}ips={{ ips | join(',') }}
+  - type: http
+    method: POST
+    url: http://b10ck.vdun.com
+    data: |
+      {
+        "domain": "{{domain}}",
+        "ips": [
+           "{{ ips | join('","') }}"
+         ]
+      }
