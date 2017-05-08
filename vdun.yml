@@ -1,5 +1,5 @@
 # 特征计算的间隔和窗口大小，单位都是秒。
-# 比如下面的配置会让 vdun 每 3 秒计算一次每个 ip 3*20 秒内所有请求的特征。
+# 比如下面的配置会让 vdun 每 5 秒计算一次每个 ip 5*12 秒内所有请求的特征。
 detect:
   interval: 5
   window_length: 12
@@ -74,7 +74,7 @@ detect:
 #
 #  风险规则判定表达式的写法可以参考以下示例，详细语法参见：https://commons.apache.org/proper/commons-jexl/reference/syntax.html
 policy:
-  - {id: "1", risk: high, if: (pv > 120 and ratio_most_path > 0.9) or (pv > 30 and ratio_most_path > 0.99)}
+  - (pv > 120 and ratio_most_path > 0.9) or (pv > 30 and ratio_most_path > 0.99)
 
 # 对于风险为 high 的 ip，拦截模块会依次调用以下 action，目前支持 http 回调。
 # http 回调的参数可以通过模版自定义，模版中可以引用以下变量：

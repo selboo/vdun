@@ -24,19 +24,18 @@ public class BrainBolt extends BaseRichBolt {
     private static final Logger LOG = LoggerFactory.getLogger(BrainBolt.class);
     private JexlEngine jexl;
     private List<JexlExpression> exprs;
-    private List<Map<String, String>> policyList;
+    private List<String> policyList;
     private OutputCollector outputCollector;
 
     public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
         outputCollector = collector;
 
-        policyList = (List<Map<String, String>>)stormConf.get("policy");
+        policyList = (List<String>)stormConf.getOrDefault("policy",  new ArrayList<String>());
         LOG.info("vdun.policy: {}", policyList);
-
         jexl = new JexlBuilder().create();
         exprs = new ArrayList<JexlExpression>();
-        for (Map<String, String> policy : policyList) {
-            exprs.add(jexl.createExpression(policy.get("if")));
+        for (String policy : policyList) {
+            exprs.add(jexl.createExpression(policy));
         }
     }
 
@@ -48,12 +47,11 @@ public class BrainBolt extends BaseRichBolt {
         Map<String, Object> feature = (Map<String, Object>)tuple.getValue(0);
         JexlContext jc = new MapContext(feature);
         for (int i = 0; i < policyList.size(); i++) {
-            Map<String, String> p = policyList.get(i);
             JexlExpression e = exprs.get(i);
             Object result = e.evaluate(jc);
-            LOG.info("policy: {}, result: {}", p, result);
             if (result instanceof Boolean && (Boolean)result == true) {
-                feature.put("risk", p.get("risk"));
+                feature.put("risk", true);
+                feature.put("policy_hit", policyList.get(i));
                 outputCollector.emit(new Values(feature));
                 return;
             }
