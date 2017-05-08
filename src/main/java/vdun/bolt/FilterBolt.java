@@ -20,7 +20,7 @@ public class FilterBolt extends BaseBasicBolt {
     private ObjectMapper json = new ObjectMapper();
 
     public void execute(Tuple tuple, BasicOutputCollector collector) {
-        String log = tuple.getStringByField("log");
+        String log = tuple.getString(0);
 
         // 解析并清理日志（直接用 Nginx 生成的 json 格式日志, 未对 “\” 进行转义）
         Request request;
