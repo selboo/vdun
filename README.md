@@ -1,23 +1,28 @@
 # 微盾
 
-## 基本规则
+HTTP Flood 防火墙
 
-对于每一个 IP ，如果其某一分钟内的访问请求满足以下任意条件，标记为异常 IP。
+## 安装运行
 
-- rate_most_path > $threshold AND pv > $threshold
-- rate_most_ua > $threshold AND pv > $threshold
-- rate_most_referer > $threshold AND pv > $threshold
+```sh
+$ mvn clean install
+$ storm target/vdun-0.0.1-SNAPSHOT.jar vdun.VDunTopology vdun.yml
+```
+
+目前运行在 storm local cluster 上，仅供验证功能用，可修改运行在集群模式。
 
 ## Topylogy 说明
 
-input（输入）-> enrich（提取有效日志特征）-> risk（计算域名风险等级）
-   -> detect（检测异常IP） -> output（存储）／brain（处理异常IP）
+input（日志输入）-> filter（提取有效日志特征）
+   -> detect（计算请求特征） -> brain（风险检测）-> output（回调拦截）
 
-## 日志格式
+## 输入日志格式
 
-配置日志格式为 json 格式，日志需包含以下字段：
+日志通过 kafka 输入：
 
-```
+配置日志格式如下，日志中需包含以下字段（一条日志一行，下面为方便说明做了格式化）：
+
+```json
 {
    "request_length" : "$request_length",
    "body_bytes_sent" : "$body_bytes_sent",
@@ -39,3 +44,12 @@ input（输入）-> enrich（提取有效日志特征）-> risk（计算域名�
    "upstream_status" : "$upstream_status"
 }
 ```
+
+然后创建一个 kafka topic，通过 kafkacat 等客户端将日志实时写入 kafka 中。
+
+```sh
+$ kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic web-log
+$ tail -F –q /path/to/web.log | kafkacat -b localhost:6667 -t web-log -z snappy
+```
+
+微盾程序配置方法见 [vdun.yml](vdun.yml) 。
