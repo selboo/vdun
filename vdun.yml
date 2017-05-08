@@ -90,7 +90,7 @@ policy:
 # 模版语法见：http://jinja.pocoo.org/docs/2.9/templates/
 action:
   - type: http
-    url: http://b10ck.vdun.com/block/these/ips?domain={{ domain }}ips={{ ips | join(',') }}
+    url: http://b10ck.vdun.com/block/these/ips?domain={{domain}}ips={{ips | join(',')}}
   - type: http
     method: POST
     url: http://b10ck.vdun.com
@@ -98,6 +98,6 @@ action:
       {
         "domain": "{{domain}}",
         "ips": [
-           "{{ ips | join('","') }}"
+           "{{ips | join('","')}}"
          ]
       }
