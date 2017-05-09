@@ -50,6 +50,11 @@ func main() {
 			Action: agent,
 			Flags: []cli.Flag{
 				cli.StringFlag{
+					Name:  "addr",
+					Value: "127.0.0.1:3868",
+					Usage: "Listening interface (intranet only!)",
+				},
+				cli.StringFlag{
 					Name:  "master",
 					Usage: "Master's host:port, run agent as a client",
 				},

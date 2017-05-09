@@ -236,7 +236,7 @@ static int callback(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg,
 }
 
 int main(int argc, char **argv)
-{
+{    
     struct nfq_handle *h;
     struct nfq_q_handle *qh;
     int fd;
@@ -249,6 +249,11 @@ int main(int argc, char **argv)
         return -1;
     }
     queueNum = atoi(argv[1]);
+
+    if(daemon(1, 1) != 0) {
+        perror("daemon()");
+        return -1;
+    }
 
     fprintf(stderr, "opening library handle\n");
     h = nfq_open();
