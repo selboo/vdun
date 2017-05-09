@@ -97,6 +97,7 @@ action:
     data: |
       {
         "domain": "{{domain}}",
+        "timeout": 86400,
         "ips": [
            "{{ips | join('","')}}"
          ]
