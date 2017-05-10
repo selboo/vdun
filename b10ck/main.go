@@ -11,7 +11,7 @@ import (
 func main() {
 	app := cli.NewApp()
 	app.Name = path.Base(os.Args[0])
-	app.Usage = "API attack defense system"
+	app.Usage = "HTTP attack defense system"
 	app.Version = "0.0.1"
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
