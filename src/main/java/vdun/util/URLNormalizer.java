@@ -32,7 +32,7 @@ public class URLNormalizer {
             }
         }
         for (Entry<String, Integer> e : C_keys.entrySet()) {
-            if (e.getValue() > 1) {
+            if (e.getKey().startsWith("\0") || e.getValue() > 1) {
                 K.add(e.getKey());
             }
         }
@@ -125,16 +125,17 @@ public class URLNormalizer {
 
         int N = U.size();
 
+        // \0 表示值不存在，\1 表示这是一个通配 *
         String K_star = null;
         double minHk = Double.POSITIVE_INFINITY;
         for (String k : K) {
             Counter<String> C = new Counter<String>();
             for (Map<String, String> u : U) {
-                C.increase(u.getOrDefault(k, "\0"));
+                C.increase(u.getOrDefault(k, "\1"));
             }
             double Hk = 0;
-            for (Entry<String, Integer> e : C.entrySet()) {
-                double ratio = ((double)e.getValue()) / N;
+            for (Integer e : C.values()) {
+                double ratio = ((double)e) / N;
                 Hk += -ratio * Math.log(ratio);
             }
             if (Hk < minHk) {
@@ -147,14 +148,14 @@ public class URLNormalizer {
         Set<String> V_s = new HashSet<String>();
         for (Map<String, String> u : U) {
             String v = u.getOrDefault(K_star, "\0");
-            if (V.contains(v)) {
+            if (V.contains(v) || v.equals("\0")) {
                 V_s.add(v);
             } else {
-                V_s.add("\0");
+                V_s.add("\1");
             }
         }
 
-        if (V_s.size() == 1 && V_s.contains("\0")) {
+        if (V_s.size() == 1 && V_s.contains("\1")) {
             return extractKeywords(U);
         }
 
@@ -163,15 +164,15 @@ public class URLNormalizer {
         K_i.remove(K_star);
         for (String v : V_s) {
             List<Map<String, String>> U_i = new ArrayList<Map<String, String>>();
-            if (v.equals("\0")) {
+            if (v.equals("\1")) {
                 for (Map<String, String> u : U) {
-                    if (!V_s.contains(u.getOrDefault(K_star, ""))) {
+                    if (!V_s.contains(u.getOrDefault(K_star, "\0"))) {
                         U_i.add(u);
                     }
                 }
             } else {
                 for (Map<String, String> u : U) {
-                    if (V_s.contains(u.getOrDefault(K_star, ""))) {
+                    if (u.getOrDefault(K_star, "\0").equals(v)) {
                         U_i.add(u);
                     }
                 }

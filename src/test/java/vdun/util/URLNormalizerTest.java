@@ -16,6 +16,7 @@ public class URLNormalizerTest {
             "/a/aHR0cDovL29xdjhzOTQxYS5ia3QuY2xvdWRkbi5jb20vVUNFTkd1S3FQYjdXb2pLdWlzaGIxT2tRL2tOUEJCSGZ2SllFLm1wMw==.html",
             "/a/aHR0cDovL29xdjhzOTQxYS5ia3QuY2xvdWRkbi5jb20vVUNFTkd1S3FQYjdXb2pLdWlzaGIxT2tRL2tOUEJCSGZ2SllFLm1wMw==.html",
             "/gen?recipe=Zhi_Hu_Zhuan_Lan&name=WebNotes",
+            "/gen?recipe=Zhi_Hu_Zhuan_Lan&name=Lalaby",
             "/gen?recipe=Pai_Qiu_Shao_Nian",
             "/gen?recipe=Jin_Ji_De_Ju_Ren",
             "/gen?recipe=Qiang_Qiang_San_Ren_Xing",
@@ -26,5 +27,6 @@ public class URLNormalizerTest {
         System.out.println(normalizer.transform("/gen?recipe=Zhong_Guo_Dian_Ying_Zi_Liao_Guan"));
         assertEquals("/gen?recipe=*", normalizer.transform("/gen?recipe=Zhong_Guo_Dian_Ying_Zi_Liao_Guan"));
         assertEquals("/a/*", normalizer.transform("/a/aHR0cDovL29xdjhzOTQxYS5ia3QuY2xvdWRkbi5jb20vVUNFTkd1S3FQYjdXb2pLdWlzaGIxT2tRL2tOUEJCSGZ2SllFLm1wMw==.html"));
+        assertEquals("/gen?name=*&recipe=Zhi_Hu_Zhuan_Lan", normalizer.transform("/gen?recipe=Zhi_Hu_Zhuan_Lan&name=WebNotes"));
     }
 }
