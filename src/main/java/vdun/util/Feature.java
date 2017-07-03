@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 public class Feature {
     private SlidingWindowCounterMonad pv;
     private Object[] counters;
-    private static String[] features = new String[]{"path", "user_agent", "referer", "status"};
+    private static String[] features = new String[]{"path", "user_agent", "referer", "status", "request_pattern"};
 
     public Feature(int featureWindowLength) {
         pv = new SlidingWindowCounterMonad(featureWindowLength);

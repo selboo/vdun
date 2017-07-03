@@ -3,6 +3,12 @@ input:
   zookeeper: 127.0.0.1:2181/
   topic: web-log
 
+# URL Pattern学习相关配置
+# interval 是学习间隔时间，url_count 是学习一次需要的 url 数。
+learn:
+  interval: 1800
+  url_count: 100
+
 # 特征计算的间隔和窗口大小，单位都是秒。
 # 比如下面的配置会让 vdun 每 5 秒计算一次每个 ip 5*12 秒内所有请求的特征。
 detect:

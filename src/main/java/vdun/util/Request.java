@@ -14,5 +14,6 @@ public class Request extends HashMap<String, String> {
        put("user_agent", jsonMsg.getOrDefault("http_user_agent", "-"));
        put("referer", jsonMsg.getOrDefault("http_referer", "-"));
        put("request_length", jsonMsg.getOrDefault("request_length", "0"));
+       put("request_uri", jsonMsg.getOrDefault("request_uri", "-"));
    }
 }

@@ -21,6 +21,7 @@ import storm.kafka.ZkHosts;
 import vdun.bolt.BrainBolt;
 import vdun.bolt.DetectBolt;
 import vdun.bolt.FilterBolt;
+import vdun.bolt.LearnBolt;
 import vdun.bolt.OutputBolt;
 
 public class VDunTopology {
@@ -45,7 +46,8 @@ public class VDunTopology {
 		spoutConfig.ignoreZkOffsets = true ;
 		builder.setSpout("input", new KafkaSpout(spoutConfig));
 
-		builder.setBolt("filter", new FilterBolt()).shuffleGrouping("input");
+		builder.setBolt("filter", new FilterBolt()).shuffleGrouping("input").allGrouping("learn");
+		builder.setBolt("learn", new LearnBolt()).globalGrouping("filter", FilterBolt.URLStreamId);
 		builder.setBolt("detect", new DetectBolt()).fieldsGrouping("filter", new Fields("domain", "ip"));
 		builder.setBolt("brain", new BrainBolt()).shuffleGrouping("detect");
 		builder.setBolt("output", new OutputBolt()).shuffleGrouping("brain");
