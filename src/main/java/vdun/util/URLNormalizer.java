@@ -84,7 +84,7 @@ public class URLNormalizer {
 
         List<String> qs = new ArrayList<String>();
         for (Entry<String, String> e : kvs.entrySet()) {
-            if (!e.getKey().startsWith("\0") && K.contains(e.getKey())) {
+            if (!e.getKey().startsWith("\0") && (K.size() == 0 || K.contains(e.getKey()))) {
                 if (V.contains(e.getValue())) {
                     qs.add(String.format("%s=%s", e.getKey(), e.getValue()));
                 } else {
@@ -97,6 +97,16 @@ public class URLNormalizer {
         }
 
         return normalizedURL;
+    }
+
+    public Object[] getParams() {
+        return new Object[]{K, V};
+    }
+
+    public void setParams(Set<String>[] params) {
+        assert params.length == 2;
+        K = params[0]; V = params[1];
+        LOG.info("set params, K: {}, V: {}", K, V);
     }
 
     private Map<String, String> toKeyValuePair(String url) {
