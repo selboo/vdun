@@ -6,7 +6,7 @@ HTTP Flood 防火墙
 
 ```sh
 $ mvn clean install
-$ storm target/vdun-0.0.1-SNAPSHOT.jar vdun.VDunTopology vdun.yml
+$ storm jar target/vdun-0.0.1-SNAPSHOT.jar vdun.VDunTopology vdun.yml
 ```
 
 目前运行在 storm local cluster 上，仅供验证功能用，可修改运行在集群模式。
