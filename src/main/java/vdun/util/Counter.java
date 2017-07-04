@@ -12,7 +12,7 @@ public class Counter<T> extends HashMap<T, Integer> {
     }
 
     public void increase(T obj, int n) {
-        put(obj, getOrDefault(obj, 0) + 1);
+        put(obj, getOrDefault(obj, 0) + n);
     }
 
     public List<Entry<T, Integer>> getMostCommon() {
