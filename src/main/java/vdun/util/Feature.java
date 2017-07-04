@@ -1,5 +1,6 @@
 package vdun.util;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,7 +64,7 @@ public class Feature {
                 mostCommon[j].pv = e.getValue();
                 mostCommon[j].ratio = (float)e.getValue() / pv;
             }
-            summary.put("most_" + feature, mostCommon);
+            summary.put("most_" + feature, Arrays.asList(mostCommon));
             summary.put("pv_most_" + feature, mostCommon[0].pv);
             summary.put("ratio_most_" + feature, mostCommon[0].ratio);
             summary.put("uniq_" + feature, counter.size());
