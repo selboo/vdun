@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 public class URLNormalizer {
     private static final Logger LOG = LoggerFactory.getLogger(URLNormalizer.class);
     private static final Pattern QS_PATTERN = Pattern.compile("([^=]+)=([^&]*)&?");
+    private static final Pattern EXT_PATTERN = Pattern.compile("\\.\\w+$");
     private Set<String> K = new HashSet<String>();
     private Set<String> V = new HashSet<String>();
 
@@ -73,12 +74,21 @@ public class URLNormalizer {
         LOG.info("kvs = {}", kvs);
 
         List<String> paths = new ArrayList<String>();
-        for (int i = 0; ; i++) {
+        int i;
+        for (i = 0; ; i++) {
             String v = kvs.get(String.format("\0%d", i));
             if (v == null) {
                 break;
             }
             paths.add("/" + (V.contains(v) ? v : "*"));
+        }
+        if (paths.size() > 0 && paths.get(paths.size()-1).equals("/*")) {
+            // 始终保留路径的扩展名
+            String last = paths.get(paths.size()-1);
+            Matcher m = EXT_PATTERN.matcher(kvs.get(String.format("\0%d", i-1)));
+            if (m.find()) {
+                paths.set(paths.size()-1, last + m.group());
+            }
         }
         String normalizedURL = String.join("", paths);
 
