@@ -27,16 +27,19 @@ detect:
 #     "pv_most_path": 5,
 #     "pv_most_refer": 11,
 #     "pv_most_ua": 11,
+#     "pv_most_request_pattern": 3,
 #
 #      // 排名第一的 path/referer/user_agent 的 pv 占总 pv 的比例。
 #     "ratio_most_path": 0.454,
 #     "ratio_most_refer": 1,
 #     "ratio_most_ua": 1,
+#     "ratio_most_request_pattern": 0.4,
 #
 #      // uniq_xxx, 出现的不同 path/referer/user_agent 的个数。
 #     "uniq_path": 3,
 #     "uniq_refer": 1,
-#     "uniq_ua": 1
+#     "uniq_ua": 1,
+#     "uniq_request_pattern": 3,
 #
 #      // 该计算周期的结束时间
 #     "@timestamp": "2015-12-15T10:34:08+0800",
@@ -81,6 +84,15 @@ detect:
 #             "ratio": 1
 #         }
 #     ],
+#
+#     // 主要的 url pattern
+#     "most_request_pattern": [
+#       {
+#           "name": "/api/*.php?app_code=*&app_ver=*&channel_id=*&device_token=*&device_type=*",
+#           "pv": 10,
+#           "ratio": 1
+#       }
+#     ]
 # }
 #
 #  风险规则判定表达式的写法可以参考以下示例，详细语法参见：https://commons.apache.org/proper/commons-jexl/reference/syntax.html
