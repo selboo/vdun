@@ -20,6 +20,7 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
 import backtype.storm.utils.TupleUtils;
+import vdun.util.ConfigParser;
 import vdun.util.URLNormalizer;
 
 public class LearnBolt extends BaseRichBolt {
@@ -36,11 +37,9 @@ public class LearnBolt extends BaseRichBolt {
         this.urls = new ArrayList<String>();
         this.isLearning = true;
         this.elapsedMins = 0;
-        Map<String, Long> conf = (Map<String, Long>)stormConf.get("learn");
-        if (conf != null) {
-            this.interval = conf.getOrDefault("interval", 60L).intValue();
-            this.logCount = conf.getOrDefault("url_count", 2000L).intValue();
-        }
+        ConfigParser parser = new ConfigParser(stormConf);
+        this.interval = parser.getLong("learn.interval", 60L).intValue();
+        this.logCount = parser.getLong("learn.url_count", 2000L).intValue();
     }
 
     public Map<String, Object> getComponentConfiguration() {

@@ -15,6 +15,7 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
 import backtype.storm.utils.TupleUtils;
+import vdun.util.ConfigParser;
 import vdun.util.Feature;
 import vdun.util.Request;
 
@@ -28,13 +29,10 @@ public class DetectBolt extends BaseRichBolt {
     public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
         this.outputCollector = collector;
         this.ipToFeature = new HashMap<String,Feature>();
-
         this.elapsedSecs = 0;
-        Map<String, Long> conf = (Map<String, Long>)stormConf.get("detect");
-        if (conf != null) {
-            this.interval = conf.getOrDefault("interval", 3L).intValue();
-            this.windowLength = conf.getOrDefault("window_length", 20L).intValue();
-        }
+        ConfigParser parser = new ConfigParser(stormConf);
+        this.interval = parser.getLong("detect.interval", 3L).intValue();
+        this.windowLength = parser.getLong("detect.window_length", 20L).intValue();
     }
 
     public Map<String, Object> getComponentConfiguration() {
