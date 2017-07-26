@@ -1,10 +1,12 @@
 package vdun.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import static vdun.util.Number.*;
 
 public class Feature {
     private SlidingWindowCounterMonad pv;
@@ -57,16 +59,19 @@ public class Feature {
             }
 
             MostCommon[] mostCommon = new MostCommon[data.size()];
+            List<Double> ratios = new ArrayList<Double>(data.size());
             for (int j = 0; j < mostCommon.length; j++) {
                 Entry<String, Integer> e = data.get(j);
                 mostCommon[j] = new MostCommon();
                 mostCommon[j].name = e.getKey();
                 mostCommon[j].pv = e.getValue();
                 mostCommon[j].ratio = (float)e.getValue() / pv;
+                ratios.add(j, (double)mostCommon[j].ratio);
             }
             summary.put("most_" + feature, Arrays.asList(mostCommon));
             summary.put("pv_most_" + feature, mostCommon[0].pv);
             summary.put("ratio_most_" + feature, mostCommon[0].ratio);
+            summary.put("ratio_std_" + feature, std(ratios));
             summary.put("uniq_" + feature, counter.size());
 
             counter.advanceWindow();
